@@ -10,22 +10,30 @@ import FileIcon from 'material-ui/svg-icons/editor/insert-drive-file'
 
 class TreeList extends Component {
     constructor(props) {
-        super(props)
+        super(props);
 
+        const { input: { value, onChange } } = this.props;
         this.state = {
             expandedListItems: [],
-            activeListItem: null,
+            activeListItem: value,
             searchTerm: ''
         }
         this.searchMode = false
         this.handleTouchTap = this.handleTouchTap.bind(this)
     }
+
+    handleChange = (eventOrValue) => {
+        this.props.onChange(eventOrValue);
+        this.props.input.onChange(eventOrValue);
+    };
+
     handleTouchTap(listItem, index) {
         if (this.searchMode) {
             if (!listItem.children) {
                 this.setState({
                     activeListItem: index
-                })
+                });
+                this.handleChange(index);
             }
         } else {
             if (listItem.children) {
@@ -45,6 +53,7 @@ class TreeList extends Component {
                 this.setState({
                     activeListItem: index
                 })
+                this.handleChange(index);
             }
         }
 
